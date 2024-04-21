@@ -1,25 +1,41 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import MyNavbar from './components/Navbar';
+import GoalForm from './components/GoalForm';
+import GoalList from './components/GoalList';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-function App() {
+const App = () => {
+  const [goals, setGoals] = useState([]);
+
+  const addGoal = (goal) => {
+    const newGoal = { ...goal, id: Math.random() };
+    setGoals([...goals, newGoal]);
+  };
+
+  const markGoalAsDone = (id) => {
+    setGoals(goals.filter(goal => goal.id !== id));
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <MyNavbar />
+      <div className="container mt-3">
+        <div className="row">
+          <div className="col-md-6">
+            <div className="sticky-top" style={{ top: 80 }}>
+              <GoalForm onAddGoal={addGoal} />
+            </div>
+          </div>
+          <div className="col-md-6">
+            <div className="goal-list-container">
+              <GoalList goals={goals} onDone={markGoalAsDone} />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
