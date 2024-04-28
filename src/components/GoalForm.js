@@ -1,30 +1,24 @@
-import React, { useState, useEffect } from 'react';
+// src/components/GoalForm.js
+import React, { useState } from 'react';
 import { Form, Button, Alert, Modal } from 'react-bootstrap';
 import './../styles/GoalForm.css';
+import { useDispatch } from 'react-redux';
+import { addGoal } from '../features/goals/goalsSlice';
 
-const GoalForm = ({ onAddGoal }) => {
+const GoalForm = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [deadline, setDeadline] = useState('');
     const [errors, setErrors] = useState({});
     const [formVisible, setFormVisible] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMobile(window.innerWidth < 768);
-        };
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    const dispatch = useDispatch();
 
     const handleSubmit = (e) => {
         e.preventDefault();
         const validationErrors = validateForm();
         if (Object.keys(validationErrors).length === 0) {
-            onAddGoal({ title, description, deadline });
+            dispatch(addGoal({ title, description, deadline }));
             setTitle('');
             setDescription('');
             setDeadline('');
@@ -58,7 +52,7 @@ const GoalForm = ({ onAddGoal }) => {
 
     return (
         <>
-            <Form className={`m-3 ${!isMobile && !formVisible ? 'mobile-hide' : ''}`} onSubmit={handleSubmit}>
+            <Form className={`m-3 ${!formVisible ? 'mobile-hide' : ''}`} onSubmit={handleSubmit}>
                 {errors.general && <Alert variant="danger">{errors.general}</Alert>}
                 <Form.Group className='custom-form-group'>
                     <Form.Label className='fw-bold mt-2'>Nombre</Form.Label>
@@ -96,19 +90,8 @@ const GoalForm = ({ onAddGoal }) => {
                     <Form.Control.Feedback type="invalid">{errors.deadline}</Form.Control.Feedback>
                 </Form.Group>
                 <div className='text-center'>
-                    <Button
-                        className={`mt-3 btn-violet-primary text-black ${!formVisible ? '' : 'mobile-hide'}`}
-                        size="lg"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            if (!formVisible) { // Verificar si el formulario no está visible
-                                setModalOpen(true);
-                            } else {
-                                handleSubmit(e);
-                            }
-                        }}
-                    >
-                        {formVisible ? "Añadir Meta" : "Abrir Formulario"}
+                    <Button className='mt-3 btn-violet-primary text-black' size="lg" type="submit">
+                        Añadir Meta
                     </Button>
                 </div>
             </Form>

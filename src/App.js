@@ -1,21 +1,14 @@
-import React, { useState } from 'react';
+// src/App.js
+import React from 'react';
 import MyNavbar from './components/Navbar';
 import GoalForm from './components/GoalForm';
 import GoalList from './components/GoalList';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import { useSelector } from 'react-redux';
 
 const App = () => {
-  const [goals, setGoals] = useState([]);
-
-  const addGoal = (goal) => {
-    const newGoal = { ...goal, id: Math.random() };
-    setGoals([...goals, newGoal]);
-  };
-
-  const markGoalAsDone = (id) => {
-    setGoals(goals.filter(goal => goal.id !== id));
-  };
+  const goals = useSelector(state => state.goals);
 
   return (
     <div className="App">
@@ -24,12 +17,12 @@ const App = () => {
         <div className="row">
           <div className="col-md-6">
             <div className="sticky-top" style={{ top: 80 }}>
-              <GoalForm onAddGoal={addGoal} />
+              <GoalForm />
             </div>
           </div>
           <div className="col-md-6">
             <div className="goal-list-container">
-              <GoalList goals={goals} onDone={markGoalAsDone} />
+              <GoalList goals={goals} />
             </div>
           </div>
         </div>
