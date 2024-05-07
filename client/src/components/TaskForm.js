@@ -55,7 +55,7 @@ const TaskForm = () => {
                 />
                 <Form.Control.Feedback type="invalid">{errors.title}</Form.Control.Feedback>
             </Form.Group>
-            <Form.Group>
+            <Form.Group className='mt-3'>
                 <Form.Label>Fecha Límite</Form.Label>
                 <Form.Control
                     type="date"
@@ -66,7 +66,7 @@ const TaskForm = () => {
                 />
                 <Form.Control.Feedback type="invalid">{errors.deadline}</Form.Control.Feedback>
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button variant="primary" className='mt-3' type="submit">
                 Agregar Tarea
             </Button>
         </Form>
