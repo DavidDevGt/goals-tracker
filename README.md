@@ -169,4 +169,4 @@ Las contribuciones son bienvenidas. Por favor, abre un issue o un pull request p
 
 ## Licencia
 
-Este proyecto está licenciado bajo la licencia MIT.
+Este proyecto está licenciado bajo la licencia propia de DavidDevGt.
