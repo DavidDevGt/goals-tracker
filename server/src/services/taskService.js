@@ -1,21 +1,21 @@
 const taskModel = require('../models/taskModel');
 
-const addTask = (task, deadline) => {
+const addTask = async (task, deadline) => {
     if (!task || !deadline) {
         throw new Error('Parámetros incorrectos');
     }
-    taskModel.addTask(task, deadline);
+    return await taskModel.addTask(task, deadline);
 };
 
-const removeTask = (task) => {
-    if (!task) {
+const removeTask = async (id) => {
+    if (!id) {
         throw new Error('Parámetros incorrectos');
     }
-    taskModel.removeTask(task);
+    return await taskModel.removeTask(id);
 };
 
-const getTasks = () => {
-    return taskModel.getTasks();
+const getTasks = async () => {
+    return await taskModel.getTasks();
 };
 
 module.exports = {

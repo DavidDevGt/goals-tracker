@@ -1,0 +1,14 @@
+CREATE DATABASE IF NOT EXISTS goal_tracker_db;
+USE goal_tracker_db;
+
+CREATE TABLE goals (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    goal VARCHAR(255) NOT NULL,
+    deadline DATE NOT NULL
+);
+
+CREATE TABLE tasks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    task VARCHAR(255) NOT NULL,
+    deadline DATE NOT NULL
+);

@@ -1,26 +1,31 @@
 const goalService = require('../services/goalService');
 
-const getGoals = (req, res) => {
-    res.status(200).json(goalService.getGoals());
-};
-
-const addGoal = (req, res) => {
+const getGoals = async (req, res) => {
     try {
-        const { goal, deadline } = req.body;
-        goalService.addGoal(goal, deadline);
-        res.status(200).json({ message: 'Meta agregada' });
+        const goals = await goalService.getGoals();
+        res.status(200).json(goals);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ error: error.message });
     }
 };
 
-const removeGoal = (req, res) => {
+const addGoal = async (req, res) => {
     try {
-        const { goal } = req.body;
-        goalService.removeGoal(goal);
-        res.status(200).json({ message: 'Meta eliminada' });
+        const { goal, deadline } = req.body;
+        await goalService.addGoal(goal, deadline);
+        res.status(201).json({ message: 'Meta agregada exitosamente' });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const removeGoal = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await goalService.removeGoal(id);
+        res.status(200).json({ message: 'Meta eliminada exitosamente' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
     }
 };
 

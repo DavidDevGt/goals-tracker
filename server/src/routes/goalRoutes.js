@@ -13,9 +13,9 @@ router.post('/addGoal', celebrate({
     })
 }), goalController.addGoal);
 
-router.delete('/removeGoal', celebrate({
-    body: Joi.object().keys({
-        goal: Joi.string().required()
+router.delete('/removeGoal/:id', celebrate({
+    params: Joi.object().keys({
+        id: Joi.number().required()
     })
 }), goalController.removeGoal);
 

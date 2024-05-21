@@ -1,21 +1,21 @@
 const goalModel = require('../models/goalModel');
 
-const addGoal = (goal, deadline) => {
+const addGoal = async (goal, deadline) => {
     if (!goal || !deadline) {
         throw new Error('Parámetros incorrectos');
     }
-    goalModel.addGoal(goal, deadline);
+    return await goalModel.addGoal(goal, deadline);
 };
 
-const removeGoal = (goal) => {
-    if (!goal) {
+const removeGoal = async (id) => {
+    if (!id) {
         throw new Error('Parámetros incorrectos');
     }
-    goalModel.removeGoal(goal);
+    return await goalModel.removeGoal(id);
 };
 
-const getGoals = () => {
-    return goalModel.getGoals();
+const getGoals = async () => {
+    return await goalModel.getGoals();
 };
 
 module.exports = {

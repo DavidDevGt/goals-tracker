@@ -1,14 +1,19 @@
-let tasks = [];
+const db = require('../config/db');
 
-const addTask = (task, deadline) => {
-    tasks.push({ task, deadline });
+const addTask = async (task, deadline) => {
+    const [rows] = await db.execute('INSERT INTO tasks (task, deadline) VALUES (?, ?)', [task, deadline]);
+    return rows;
 };
 
-const removeTask = (task) => {
-    tasks = tasks.filter(t => t.task !== task);
+const removeTask = async (id) => {
+    const [rows] = await db.execute('DELETE FROM tasks WHERE id = ?', [id]);
+    return rows;
 };
 
-const getTasks = () => tasks;
+const getTasks = async () => {
+    const [rows] = await db.execute('SELECT * FROM tasks');
+    return rows;
+};
 
 module.exports = {
     addTask,
