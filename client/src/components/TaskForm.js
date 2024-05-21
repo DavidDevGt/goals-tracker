@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-import { addTask } from '../features/tasks/tasksSlice';
+import { createTask, getTasks } from '../features/tasks/tasksSlice';
 
 const TaskForm = () => {
-    const [title, setTitle] = useState('');
+    const [task, setTask] = useState('');
     const [deadline, setDeadline] = useState('');
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch();
@@ -13,10 +13,16 @@ const TaskForm = () => {
         e.preventDefault();
         const validationErrors = validateForm();
         if (Object.keys(validationErrors).length === 0) {
-            dispatch(addTask({ title, deadline }));
-            setTitle('');
-            setDeadline('');
-            setErrors({});
+            dispatch(createTask({ task, deadline })).unwrap()
+                .then(() => {
+                    setTask('');
+                    setDeadline('');
+                    setErrors({});
+                    dispatch(getTasks()); // Vuelve a obtener las tareas después de agregar una nueva
+                })
+                .catch(error => {
+                    setErrors({ general: error.message });
+                });
         } else {
             setErrors(validationErrors);
         }
@@ -24,8 +30,8 @@ const TaskForm = () => {
 
     const validateForm = () => {
         const errors = {};
-        if (!title.trim()) {
-            errors.title = 'El nombre de la tarea es requerido';
+        if (!task.trim()) {
+            errors.task = 'El nombre de la tarea es requerido';
         }
         if (!deadline) {
             errors.deadline = 'La fecha límite es requerida';
@@ -47,13 +53,13 @@ const TaskForm = () => {
                 <Form.Label>Nombre de la Tarea</Form.Label>
                 <Form.Control
                     type="text"
-                    name="title"
+                    name="task"
                     placeholder="Nombre de la tarea"
-                    value={title}
-                    onChange={(e) => handleChange(e, setTitle)}
-                    isInvalid={errors.title}
+                    value={task}
+                    onChange={(e) => handleChange(e, setTask)}
+                    isInvalid={!!errors.task}
                 />
-                <Form.Control.Feedback type="invalid">{errors.title}</Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">{errors.task}</Form.Control.Feedback>
             </Form.Group>
             <Form.Group className='mt-3'>
                 <Form.Label>Fecha Límite</Form.Label>
@@ -62,7 +68,7 @@ const TaskForm = () => {
                     name="deadline"
                     value={deadline}
                     onChange={(e) => handleChange(e, setDeadline)}
-                    isInvalid={errors.deadline}
+                    isInvalid={!!errors.deadline}
                 />
                 <Form.Control.Feedback type="invalid">{errors.deadline}</Form.Control.Feedback>
             </Form.Group>

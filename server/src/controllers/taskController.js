@@ -1,36 +1,36 @@
-const goalService = require('../services/goalService');
+const taskService = require('../services/taskService');
 
-const getGoals = async (req, res) => {
+const getTasks = async (req, res) => {
     try {
-        const goals = await goalService.getGoals();
-        res.status(200).json(goals);
+        const tasks = await taskService.getTasks();
+        res.status(200).json(tasks);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-const addGoal = async (req, res) => {
+const addTask = async (req, res) => {
     try {
-        const { goal, deadline } = req.body;
-        await goalService.addGoal(goal, deadline);
-        res.status(201).json({ message: 'Meta agregada exitosamente' });
+        const { task, deadline } = req.body;
+        await taskService.addTask(task, deadline);
+        res.status(201).json({ message: 'Tarea agregada exitosamente' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-const removeGoal = async (req, res) => {
+const removeTask = async (req, res) => {
     try {
         const { id } = req.params;
-        await goalService.removeGoal(id);
-        res.status(200).json({ message: 'Meta eliminada exitosamente' });
+        await taskService.removeTask(id);
+        res.status(200).json({ message: 'Tarea eliminada exitosamente' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
 module.exports = {
-    getGoals,
-    addGoal,
-    removeGoal
+    getTasks,
+    addTask,
+    removeTask
 };

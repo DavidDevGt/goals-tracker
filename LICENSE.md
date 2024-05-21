@@ -26,4 +26,4 @@ By using, copying, modifying, or distributing this software (the "Software"), yo
 
 By using the Software, you acknowledge that you have read and understood these terms and agree to be bound by them.
 
-*DavidDevGT License, 2024*
+## DavidDevGT License, 2024

@@ -13,9 +13,9 @@ router.post('/addTask', celebrate({
     })
 }), taskController.addTask);
 
-router.delete('/removeTask', celebrate({
-    body: Joi.object().keys({
-        task: Joi.string().required()
+router.delete('/removeTask/:id', celebrate({
+    params: Joi.object().keys({
+        id: Joi.number().required()
     })
 }), taskController.removeTask);
 
