@@ -10,7 +10,7 @@ services:
     ports:
       - "3306:3306"
 
-  server:
+  backend:
     build: 
       context: ./server
     environment:
@@ -22,3 +22,11 @@ services:
       - "3000:3000"
     depends_on:
       - db
+
+  frontend:
+    build: 
+      context: ./client
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
