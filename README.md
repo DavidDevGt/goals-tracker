@@ -9,6 +9,7 @@ Goals Tracker es una aplicación web para gestionar tareas y objetivos, desarrol
 - [Estructura del Proyecto](#estructura-del-proyecto)
 - [Instalación](#instalación)
 - [Uso](#uso)
+- [Orquestación con Docker](#orquestación-con-docker)
 - [Contribuciones](#contribuciones)
 - [Licencia](#licencia)
 
@@ -162,6 +163,138 @@ Goals Tracker es una aplicación web para gestionar tareas y objetivos, desarrol
 
 - `/api/goals`: Endpoints para la gestión de objetivos
 - `/api/tasks`: Endpoints para la gestión de tareas
+
+## Orquestación con Docker
+
+### Usando Docker Compose
+
+Para construir y ejecutar la aplicación completa (servidor Node.js y base de datos MySQL) utilizando Docker Compose, sigue estos pasos:
+
+1. Asegúrate de estar en el directorio raíz del proyecto `goals-tracker`.
+
+2. Construye y levanta los contenedores:
+   ```bash
+   docker-compose up --build
+   ```
+
+Esto construirá las imágenes Docker y levantará los contenedores para el servidor y la base de datos. La aplicación estará disponible en `http://localhost:3000`.
+
+### Archivos Docker
+
+#### Dockerfile para el servidor Node.js (`server/Dockerfile`)
+
+```Dockerfile
+# Fase 1: Construcción
+FROM node:20 as builder
+
+# Establecer el directorio de trabajo
+WORKDIR /app
+
+# Copiar los archivos de proyecto
+COPY package*.json ./
+
+# Instalar dependencias
+RUN npm install
+
+# Copiar el resto del código fuente
+COPY . .
+
+# Exponer el puerto
+EXPOSE 3000
+
+# Comando para iniciar la aplicación
+CMD ["node", "src/index.js"]
+```
+
+#### Dockerfile para la base de datos MySQL (`db/Dockerfile`)
+
+```Dockerfile
+FROM mysql:latest
+
+# Copiar el script de inicialización
+COPY db.sql /docker-entrypoint-initdb.d/
+
+# Exponer el puerto
+EXPOSE 3306
+```
+
+#### Archivo `db.sql` (dentro del directorio `db`)
+
+```sql
+CREATE DATABASE IF NOT EXISTS goal_tracker_db;
+USE goal_tracker_db;
+
+CREATE TABLE goals (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    goal VARCHAR(255) NOT NULL,
+    deadline DATE NOT NULL
+);
+
+CREATE TABLE tasks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    task VARCHAR(255) NOT NULL,
+    deadline DATE NOT NULL
+);
+```
+
+#### Archivo `docker-compose.yml`
+
+```yaml
+version: '3.8'
+
+services:
+  db:
+    build: 
+      context: ./db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: goal_tracker_db
+    ports:
+      - "3306:3306"
+
+  server:
+    build: 
+      context: ./server
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: rootpassword
+      DB_NAME: goal_tracker_db
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+```
+
+### Forma Manual
+
+#### Frontend
+
+1. Instala las dependencias:
+   ```bash
+   cd client
+   npm install
+   ```
+
+2. Inicia la aplicación de React:
+   ```bash
+   npm start
+   ```
+
+#### Backend
+
+1. Instala las dependencias:
+   ```bash
+   cd server
+   npm install
+   ```
+
+2. Configura la base de datos MySQL y ejecuta el script `db.sql` para crear las tablas necesarias.
+
+3. Inicia el servidor de Node.js:
+   ```bash
+   npm start
+   ```
 
 ## Contribuciones
 
