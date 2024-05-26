@@ -204,6 +204,7 @@ EXPOSE 3000
 
 # Comando para iniciar la aplicación
 CMD ["node", "src/index.js"]
+
 ```
 
 #### Dockerfile para la base de datos MySQL (`db/Dockerfile`)
@@ -212,7 +213,7 @@ CMD ["node", "src/index.js"]
 FROM mysql:latest
 
 # Copiar el script de inicialización
-COPY db.sql /docker-entrypoint-initdb.d/
+COPY ../server/src/config/db.sql /docker-entrypoint-initdb.d/
 
 # Exponer el puerto
 EXPOSE 3306
